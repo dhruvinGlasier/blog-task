@@ -31,7 +31,7 @@ export default function BlogPostPage({ post }: BlogPostPageProps) {
         </div>
 
         {/* Hero Image - Full Width, No Padding */}
-        <div className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px]">
+        <div className="relative w-[90vw] mx-auto md:w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px]">
           <Image
             src={post.image}
             alt={post.title}
