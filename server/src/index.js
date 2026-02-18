@@ -9,7 +9,23 @@ const PORT = process.env.PORT || 4000;
 
 connectDB();
 
-app.use(cors());
+// CORS: allow Vercel and other frontends; set FRONTEND_URL to restrict in production
+const allowedOrigins = process.env.FRONTEND_URL
+  ? process.env.FRONTEND_URL.split(',').map((o) => o.trim()).filter(Boolean)
+  : [];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    // No FRONTEND_URL = allow all (dev). Else allow list + *.vercel.app
+    if (allowedOrigins.length === 0) return callback(null, true);
+    if (origin.endsWith('.vercel.app') || allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(null, false);
+  },
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use('/api/posts', postsRouter);
