@@ -71,14 +71,29 @@ router.post('/', async (req, res) => {
  */
 router.get('/:slug/comments', async (req, res) => {
   try {
-    const post = await Post.findOne({ slug: req.params.slug });
+    const post = await Post.findOne({ slug: req.params.slug }).lean();
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
-    const comments = await Comment.find({ postSlug: req.params.slug }).sort({ date: -1 });
-    res.json(comments);
+    const comments = await Comment.find({ postSlug: req.params.slug }).sort({ date: -1 }).lean();
+    const formatted = comments.map((c) => {
+      let dateStr = '';
+      try {
+        dateStr = c.date ? new Date(c.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+      } catch (_) {}
+      return {
+        id: c._id ? c._id.toString() : '',
+        author: c.author,
+        avatar: c.avatar || '',
+        comment: c.comment,
+        rating: c.rating,
+        date: dateStr,
+      };
+    });
+    res.json(formatted);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('GET comments error:', error);
+    res.status(500).json({ error: error.message || 'Failed to fetch comments' });
   }
 });
 

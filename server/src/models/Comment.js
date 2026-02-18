@@ -11,11 +11,17 @@ const commentSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-// Return date as formatted string in API responses
+// Return date as formatted string in API responses (safe for production)
 commentSchema.set('toJSON', {
   transform: (doc, ret) => {
-    ret.id = ret._id.toString();
-    ret.date = ret.date ? new Date(ret.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+    try {
+      ret.id = ret._id ? ret._id.toString() : '';
+      ret.date = ret.date
+        ? new Date(ret.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+        : '';
+    } catch (e) {
+      ret.date = '';
+    }
     delete ret._id;
     delete ret.__v;
     delete ret.createdAt;
