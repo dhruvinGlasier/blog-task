@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
+/* Custom Slick Slider Styles */
+.slick-slider {
+  position: relative;
+}
+
+.slick-list {
+  overflow: hidden;
+}
+
+.slick-track {
+  display: flex;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-gray-800 font-sans;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* About Author section - dotted blue left border */
+.about-author-container {
+  border-left: 3px dotted #a0c4ff;
+}
+
+/* Comments section - dotted blue left border + heading bar */
+.comments-section-container {
+  border-left: 3px dotted #a0c4ff;
+}
+
+.section-heading-with-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-heading-bar {
+  width: 4px;
+  height: 1.25em;
+  background: #000;
+  flex-shrink: 0;
+}
